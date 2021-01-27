@@ -61,12 +61,14 @@ for tmp in dates_raw:
 # łączenie danych w pary (data, kurs)
 dates_rates_list = list(zip(dates_list, rates_list))
 
+dates_rates_list_titeled = [("Data", "Kurs")] + dates_rates_list
+print(dates_rates_list_titeled)
 # zapis danych do pliku CSV na potrzeby dalszej pracy bez konieczności ciągłego pobierania danych od nowa
 file_name = 'NBP_dane.csv'
 file = open(file_name, 'w+', newline='')
 with file:
     write = csv.writer(file)
-    write.writerows(dates_rates_list)
+    write.writerows(dates_rates_list_titeled)
 
 
 # #drukowanie wykresu walut (CHF/PLN)
