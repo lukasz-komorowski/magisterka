@@ -1,1 +1,2 @@
-# System optymalizacji spłaty kredytów walutowych - Łukasz Komorowski. Praca dyplomowa magisterska.
+# Łukasz Komorowski - Praca dyplomowa magisterska
+System optymalizacji spłaty kredytów walutowych
