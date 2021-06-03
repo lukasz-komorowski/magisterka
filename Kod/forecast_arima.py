@@ -1,6 +1,6 @@
 from pandas import read_csv
 from matplotlib import pyplot
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_squared_error
 
 
@@ -10,10 +10,13 @@ def GetData(fileName):
 
 
 # Function that calls ARIMA model to fit and forecast the data
-def StartARIMAForecasting(Actual, P, D, Q):
+def start_arima_forecasting(Actual, P, D, Q):
     model = ARIMA(Actual, order=(P, D, Q))
-    model_fit = model.fit(disp=0)
-    prediction = model_fit.forecast()[0]
+    print(Actual[len(Actual)-1])
+    model_fit = model.fit()
+    prediction = model_fit.forecast()
+    print(prediction)
+    prediction = prediction[0]
     return prediction
 
 
@@ -23,7 +26,7 @@ ActualData = GetData('NBP_dane.csv')
 NumberOfElements = len(ActualData)
 
 # Use 70% of data as training, rest 30% to Test model
-TrainingSize = int(NumberOfElements * 0.7)
+TrainingSize = int(NumberOfElements - 15)
 TrainingData = ActualData[0:TrainingSize]
 TestData = ActualData[TrainingSize:NumberOfElements]
 
@@ -35,16 +38,24 @@ Predictions = list()
 for timepoint in range(len(TestData)):
     ActualValue = TestData[timepoint]
     # forcast value
-    Prediction = StartARIMAForecasting(Actual, 3, 1, 0)
+    Prediction = start_arima_forecasting(Actual, 1, 1, 0)
     print('Actual=%f, Predicted=%f' % (ActualValue, Prediction))
     # add it in the list
+    # print(type(ActualValue))
+    # print(type(Prediction))
     Predictions.append(Prediction)
-    Actual.append(ActualValue)
+    Actual.append([Prediction])
 
 # Print MSE to see how good the model is
 Error = mean_squared_error(TestData, Predictions)
-print('Test Mean Squared Error (smaller the better fit): %.3f' % Error)
+print('Test Mean Squared Error (smaller the better fit): %.6f' % Error)
+
+Predictions.pop(0)
+TestData = list(TestData)
+TestData.pop()
+
 # plot
 pyplot.plot(TestData)
 pyplot.plot(Predictions, color='red')
+print('Actual length = %f, Predicted length = %f' % (len(TestData), len(Predictions)))
 pyplot.show()
