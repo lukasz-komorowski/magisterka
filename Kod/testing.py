@@ -86,27 +86,35 @@ from finta import TA
 # print(sorted(clf.cv_results_.keys()))
 
 
-exchange_rates = get_values_from_csv("NBP_dane_100.csv")
-
-df = pd.DataFrame(exchange_rates, columns=['value'])
-print(df)
-
-plt.plot(df.value, label='CHF')
-plt.show()
-
-exp1 = df.value.ewm(span=12, adjust=False).mean()
-exp2 = df.value.ewm(span=26, adjust=False).mean()
-macd = exp1-exp2
-exp3 = macd.ewm(span=9, adjust=False).mean()
-
-plt.plot(macd, label='AMD MACD', color = '#EBD2BE')
-plt.plot(exp3, label='Signal Line', color='#E5A4CB')
-plt.legend(loc='upper left')
-plt.show()
+# exchange_rates = get_values_from_csv("NBP_dane_100.csv")
+#
+# df = pd.DataFrame(exchange_rates, columns=['value'])
+# print(df)
+#
+# plt.plot(df.value, label='CHF')
+# plt.show()
+#
+# exp1 = df.value.ewm(span=12, adjust=False).mean()
+# exp2 = df.value.ewm(span=26, adjust=False).mean()
+# macd = exp1-exp2
+# exp3 = macd.ewm(span=9, adjust=False).mean()
+#
+# plt.plot(macd, label='AMD MACD', color = '#EBD2BE')
+# plt.plot(exp3, label='Signal Line', color='#E5A4CB')
+# plt.legend(loc='upper left')
+# plt.show()
 
 # ToDo: check FinTA (Financial Technical Analysis)
 #  pip install finta
 #  https://pypi.org/project/finta/
 
-ohlc = pd.read_csv("NBP_dane_ohlc_100.csv", index_col="date", parse_dates=True)
-print(TA.SMA(ohlc, 5))
+ohlc = pd.read_csv("NBP_dane_ohlc_2020.csv", index_col="date", parse_dates=True)
+SMA15_CHF = TA.SMA(ohlc, 10)
+SMA30_CHF = TA.SMA(ohlc, 30)
+SMA45_CHF = TA.SMA(ohlc, 45)
+plt.plot(ohlc["close"], label='CHF', color='black')
+# plt.plot(SMA15_CHF, label='SMA 10-dniowe')
+plt.plot(SMA30_CHF, label='SMA 30-dniowe')
+# plt.plot(SMA45_CHF, label='SMA 45-dniowe')
+plt.legend(loc='upper left')
+plt.show()
